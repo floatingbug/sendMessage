@@ -12,6 +12,5 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/send-message", sendMessage({nodemailer}));
-//app.post("/send-message", (req, res)=>{console.log("sadf")});
 
-server.listen(3001);
+server.listen(3002);

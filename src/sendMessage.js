@@ -7,10 +7,10 @@ function sendMessage({nodemailer}){
 async function handleRequest(params){
 	const {req, res, nodemailer} = params;
 	const token = req.body.token;
-	
+
 	//validate captcha-token
 	const data = new URLSearchParams({
-		secret: '6LcDywkqAAAAAJ33W3srzM4vZZBkNoPFPHAPd3u3',
+		secret: process.env.CAPTCHA_KEY,
 		response: token,
 		remoteip: req.ip
 	});
@@ -40,16 +40,16 @@ async function handleRequest(params){
 	}
 
 	//validate message
-	if(!req.body || !req.body.subject || !req.body.mail || !req.body.msg){
+	if(!req.body || !req.body.subject || !req.body.email || !req.body.message){
 		res.status(400);
-		return res.json({success: false, msg: "subject, mail and msg is required."});
+		return res.json({success: false, msg: "subject, email and message is required."});
 	}
-	if(typeof req.body.subject !== "string" || typeof req.body.mail !== "string" || typeof req.body.msg !== "string"){
+	if(typeof req.body.subject !== "string" || typeof req.body.email !== "string" || typeof req.body.message !== "string"){
 		res.status(400);
 		return res.json({success: false, msg: "every parameter must be type string."});
 	}
 
-	if(!validateEmail(req.body.mail)){
+	if(!validateEmail(req.body.email)){
 		res.status(400);
 		return res.json({success: false, msg: "No valid e-mail address."});
 	}
@@ -57,8 +57,8 @@ async function handleRequest(params){
 	//prepare e-mail
 	const message = {
 		subject: req.body.subject,
-		mail: req.body.mail,
-		msg: req.body.msg
+		mail: req.body.email,
+		msg: req.body.message
 	};
 
 
